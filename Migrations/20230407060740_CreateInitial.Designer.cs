@@ -11,7 +11,7 @@ using dotnetEFAndJWT.Data;
 namespace dotnetEFAndJWT.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230406072934_CreateInitial")]
+    [Migration("20230407060740_CreateInitial")]
     partial class CreateInitial
     {
         /// <inheritdoc />
@@ -46,6 +46,31 @@ namespace dotnetEFAndJWT.Migrations
                     b.HasKey("student_id");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("dotnetEFAndJWT.classes.User", b =>
+                {
+                    b.Property<int>("user_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("user_id"));
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("user_id");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,6 +13,8 @@ namespace dotnetEFAndJWT.auto
         {
             CreateMap<Student, StudentDto>();
             CreateMap<StudentDto, Student>();
+            CreateMap<UserDto, User>();
+            CreateMap<User, UserDto>();
         }
     }
 }

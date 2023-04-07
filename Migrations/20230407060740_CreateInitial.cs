@@ -24,6 +24,21 @@ namespace dotnetEFAndJWT.Migrations
                 {
                     table.PrimaryKey("PK_Students", x => x.student_id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    user_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.user_id);
+                });
         }
 
         /// <inheritdoc />
@@ -31,6 +46,9 @@ namespace dotnetEFAndJWT.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Students");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
