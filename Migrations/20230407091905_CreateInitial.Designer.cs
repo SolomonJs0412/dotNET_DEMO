@@ -11,7 +11,7 @@ using dotnetEFAndJWT.Data;
 namespace dotnetEFAndJWT.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230407060740_CreateInitial")]
+    [Migration("20230407091905_CreateInitial")]
     partial class CreateInitial
     {
         /// <inheritdoc />
@@ -63,6 +63,10 @@ namespace dotnetEFAndJWT.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()

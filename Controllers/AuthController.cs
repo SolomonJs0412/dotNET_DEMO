@@ -11,6 +11,8 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
+using dotnetEFAndJWT.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace dotnetEFAndJWT.Controllers
 {
@@ -29,6 +31,7 @@ namespace dotnetEFAndJWT.Controllers
 
         [HttpGet]
         [Route("getUsers")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<User>>> GetUsers()
         {
             var users = await _dbContext.Users.ToListAsync();
@@ -45,6 +48,7 @@ namespace dotnetEFAndJWT.Controllers
 
             string name = req.Username;
             var user = new User(name, passwordHash, passwordSalt);
+            user.Role = "Admin";
             _dbContext.Add(user);
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction(nameof(Register), new { Username = req.Username }, user);
@@ -64,7 +68,7 @@ namespace dotnetEFAndJWT.Controllers
                 return BadRequest("Invalid password");
             }
 
-            string token = CreatedToken(user);
+            string token = CreatedToken(userDb);
             return Ok(token);
         }
 
@@ -72,7 +76,8 @@ namespace dotnetEFAndJWT.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.Role)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("Key:Token").Value));
 
