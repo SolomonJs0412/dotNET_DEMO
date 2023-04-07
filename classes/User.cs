@@ -13,5 +13,13 @@ namespace dotnetEFAndJWT.classes
         public string Username { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+
+        public User(string Username, byte[] PasswordHash, byte[] PasswordSalt)
+        {
+            this.Username = Username;
+            this.PasswordHash = PasswordHash;
+            this.PasswordSalt = PasswordSalt;
+        }
+        public User() { }
     }
 }

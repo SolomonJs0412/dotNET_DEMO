@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnetEFAndJWT.Controllers
 {
@@ -26,18 +27,25 @@ namespace dotnetEFAndJWT.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpGet]
+        [Route("getUsers")]
+        public async Task<ActionResult<List<User>>> GetUsers()
+        {
+            var users = await _dbContext.Users.ToListAsync();
+            if (users.Count == 0) return NotFound();
+            return Ok(users);
+        }
+
         public static User user = new User();
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<User>> Register(UserDto req)
+        public async Task<ActionResult<User>> Register([FromBody] UserDto req)
         {
             CreatePasswordHash(req.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            user.Username = req.Username;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            _dbContext.Users.Add(user);
+            var name = req.Username;
+            var user = new User(name, passwordHash, passwordSalt);
+            _dbContext.Add(user);
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction(nameof(Register), new { Username = req.Username }, user);
         }
