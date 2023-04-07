@@ -43,7 +43,7 @@ namespace dotnetEFAndJWT.Controllers
         {
             CreatePasswordHash(req.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            var name = req.Username;
+            string name = req.Username;
             var user = new User(name, passwordHash, passwordSalt);
             _dbContext.Add(user);
             await _dbContext.SaveChangesAsync();
