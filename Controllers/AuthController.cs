@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotnetEFAndJWT.classes;
-using dotnetEFAndJWT.JWTHelpers;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Security.Claims;
@@ -48,7 +47,7 @@ namespace dotnetEFAndJWT.Controllers
 
             string name = req.Username;
             var user = new User(name, passwordHash, passwordSalt);
-            user.Role = "Admin";
+            user.Role = "User";
             _dbContext.Add(user);
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction(nameof(Register), new { Username = req.Username }, user);
